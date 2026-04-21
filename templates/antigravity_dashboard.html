@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anti-Gravity | AI Hostel Intelligence</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='antigravity.css') }}">
+    <!-- Fallback if not running through Flask -->
+    <link rel="stylesheet" href="../static/antigravity.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <span class="logo-text">ANTIGRAVITY</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#" class="nav-item active">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="users"></i>
+                    <span>Match Finder</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="bar-chart-3"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div style="margin-top: auto;">
+                <a href="#" class="nav-item">
+                    <i data-lucide="log-out"></i>
+                    <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div>
+                    <h2 style="font-size: 1.5rem; font-weight: 700;">Welcome back, Alex</h2>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Your cabin matches are ready for review.</p>
+                </div>
+                
+                <div class="search-bar">
+                    <i data-lucide="search" size="18"></i>
+                    <input type="text" placeholder="Search roommates...">
+                </div>
+            </header>
+
+            <!-- Admin Style Analytics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Compatibility Average</div>
+                    <div class="stat-value">94.2%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Active Connections</div>
+                    <div class="stat-value">12</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">System Health</div>
+                    <div class="stat-value" style="color: var(--primary-cyan)">Stable</div>
+                </div>
+            </div>
+
+            <section>
+                <div class="section-title">
+                    <i data-lucide="sparkles" size="20" style="color: var(--primary-cyan)"></i>
+                    Top AI Matches
+                </div>
+                
+                <div class="grid-matches">
+                    <!-- Match 1 -->
+                    <div class="match-card">
+                        <div class="match-header">
+                            <div class="user-avatar">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Felix">
+                            </div>
+                            <div>
+                                <h4 style="font-weight: 600;">Felix Zheng</h4>
+                                <p style="font-size: 0.8rem; color: var(--text-dim);">CS Major • Night Owl</p>
+                            </div>
+                            <div class="match-score">98% Match</div>
+                        </div>
+                        <div class="match-tags">
+                            <span class="tag">Gaming</span>
+                            <span class="tag">Late Night Coder</span>
+                            <span class="tag">Quiet</span>
+                        </div>
+                        <button style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; cursor: pointer; transition: 0.3s; font-weight: 500;">View Profile</button>
+                    </div>
+
+                    <!-- Match 2 -->
+                    <div class="match-card" style="animation-delay: -3s;">
+                        <div class="match-header">
+                            <div class="user-avatar">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" alt="Sarah">
+                            </div>
+                            <div>
+                                <h4 style="font-weight: 600;">Sarah Miller</h4>
+                                <p style="font-size: 0.8rem; color: var(--text-dim);">Design Major • Early Bird</p>
+                            </div>
+                            <div class="match-score">92% Match</div>
+                        </div>
+                        <div class="match-tags">
+                            <span class="tag">Artist</span>
+                            <span class="tag">Clean Observer</span>
+                            <span class="tag">Yoga</span>
+                        </div>
+                        <button style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; cursor: pointer; transition: 0.3s; font-weight: 500;">View Profile</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- AI Chat Side Panel -->
+        <aside class="chat-panel">
+            <div class="chat-header">
+                <div class="ai-status"></div>
+                <div>
+                    <h4 style="font-size: 0.95rem; font-weight: 600;">Roommate Advisor</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-dim);">AI Personal Concierge</p>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai">
+                    Hello Alex! I've analyzed 45 potential roommates. Felix looks like a perfect fit for your coding schedule. Would you like to see why?
+                </div>
+                <div class="message user">
+                    Yes, tell me more about Felix's habits.
+                </div>
+                <div class="message ai">
+                    Felix also prefers a room temperature of 22°C and usually works until 2 AM, matching your routine perfectly.
+                </div>
+                <!-- Typing Indicator Example -->
+                <div class="typing" id="typingIndicator" style="display: none;">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="chat-input-wrapper">
+                    <input type="text" placeholder="Ask AI about roommates..." id="chatInput">
+                    <button class="send-btn">
+                        <i data-lucide="send" size="18" color="white"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Parallax Mouse Effect
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.stat-card, .match-card');
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+
+            cards.forEach(card => {
+                card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+            });
+        });
+
+        // Simple Chat Interaction
+        const input = document.getElementById('chatInput');
+        const messages = document.getElementById('chatMessages');
+        const typing = document.getElementById('typingIndicator');
+
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && input.value.trim()) {
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                userMsg.textContent = input.value;
+                messages.appendChild(userMsg);
+                input.value = '';
+                
+                // Scroll to bottom
+                messages.scrollTop = messages.scrollHeight;
+
+                // Fake AI Response
+                setTimeout(() => {
+                    typing.style.display = 'flex';
+                    messages.scrollTop = messages.scrollHeight;
+                    
+                    setTimeout(() => {
+                        typing.style.display = 'none';
+                        const aiMsg = document.createElement('div');
+                        aiMsg.className = 'message ai';
+                        aiMsg.textContent = "Processing your request with gravity-defying speed... 🚀";
+                        messages.appendChild(aiMsg);
+                        messages.scrollTop = messages.scrollHeight;
+                    }, 2000);
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>

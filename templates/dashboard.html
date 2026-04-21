@@ -70,6 +70,7 @@
                 </div>
                 {% endif %}
 
+                {% if role == 'student' %}
                 <div class="dash-container">
                     <div class="dash-grid">
                         <!-- LEFT PANEL: Primary Identity -->
@@ -176,6 +177,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </section>
         </div>
 
@@ -605,6 +607,90 @@
                 });
             });
         });
+    </script>
+
+    <!-- CHATBOT UI -->
+    <div class="chatbot-container">
+        <div id="chatbotWindow" class="chatbot-window">
+            <div class="chatbot-header">
+                <h3><span class="status-dot"></span> Smart Assistant</h3>
+                <button onclick="toggleChat()" style="background:transparent; border:none; color:white; cursor:pointer; font-size:1.2rem;">×</button>
+            </div>
+            <div id="chatMessages" class="chatbot-messages">
+                <div class="message bot">
+                    Hello! I'm your Anti-Gravity Assistant. How can I help you today?
+                </div>
+            </div>
+            <div id="typingIndicator" class="typing-indicator">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask me something..." onkeypress="handleChatKey(event)">
+                <button onclick="sendChatMessage()">🚀</button>
+            </div>
+        </div>
+        <button class="chatbot-toggle" onclick="toggleChat()">
+            <span id="chatIcon">💬</span>
+        </button>
+    </div>
+
+    <script>
+        const chatWindow = document.getElementById('chatbotWindow');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const chatIcon = document.getElementById('chatIcon');
+
+        function toggleChat() {
+            chatWindow.classList.toggle('active');
+            chatIcon.innerText = chatWindow.classList.contains('active') ? '✖' : '💬';
+            if(chatWindow.classList.contains('active')) chatInput.focus();
+        }
+
+        function handleChatKey(e) {
+            if (e.key === 'Enter') sendChatMessage();
+        }
+
+        async function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            chatInput.value = '';
+
+            // Show typing indicator
+            typingIndicator.style.display = 'block';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const response = await fetch('/chatbot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                const data = await response.json();
+                
+                typingIndicator.style.display = 'none';
+                if (data.reply) {
+                    addMessage(data.reply, 'bot');
+                } else {
+                    addMessage("Sorry, I encountered an error connecting to the matrix.", 'bot');
+                }
+            } catch (error) {
+                typingIndicator.style.display = 'none';
+                addMessage("Neural link failure. Please try again later.", 'bot');
+            }
+        }
+
+        function addMessage(text, side) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${side}`;
+            msgDiv.innerText = text;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
         function closeModals() { document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('show')); }
 
         {% if role == 'student' and data %}

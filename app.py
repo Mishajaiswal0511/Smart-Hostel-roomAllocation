@@ -8,7 +8,8 @@ from model import (
     compare_two_students,
     delete_student as m_delete_student,
     get_all_students,
-    update_student as m_update_student
+    update_student as m_update_student,
+    get_chatbot_response
 )
 
 app = Flask(__name__)
@@ -68,6 +69,12 @@ def home():
             session.clear()
             return redirect(url_for('login'))
         return render_template("dashboard.html", role="student", data=result)
+
+
+@app.route('/antigravity')
+def antigravity():
+    # Pass some dummy data for the design showcase
+    return render_template("antigravity_dashboard.html")
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -193,6 +200,25 @@ def check_two():
         return json_response({"error": "❌ One or both student IDs not found"}, status=404)
     except Exception as e:
         return json_response({"error": "❌ Internal error calculating match"}, status=500)
+
+
+@app.route('/chatbot', methods=['POST'])
+def chatbot():
+    if "user_id" not in session:
+        return json_response({"error": "Unauthorized"}, status=401)
+    
+    try:
+        data = request.get_json(silent=True)
+        if not data or 'message' not in data:
+            return json_response({"error": "Invalid message"}, status=400)
+        
+        user_id = session.get("user_id")
+        user_message = data.get('message')
+        
+        bot_reply = get_chatbot_response(user_id, user_message)
+        return json_response({"reply": bot_reply})
+    except Exception as e:
+        return json_response({"error": str(e)}, status=500)
 
 
 if __name__ == "__main__":

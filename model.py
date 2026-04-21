@@ -424,3 +424,59 @@ def compare_two_students(id1, id2):
         "explanation": generate_explanation(s1, s2),
         "prediction": "Compatible ✅" if final_score > 75 else "Not Compatible ❌"
     }
+
+
+import google.generativeai as genai
+import os
+from dotenv import load_dotenv
+
+# -------- GEMINI CONFIGURATION --------
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=GEMINI_API_KEY)
+
+SYSTEM_PROMPT = (
+    "You are Anti-Gravity Smart Hostel Assistant. You help students with roommate matching, "
+    "explain compatibility results from machine learning models, and assist with hostel system navigation. "
+    "Always respond naturally and clearly like a helpful AI assistant."
+)
+
+def get_chatbot_response(user_id, message):
+    msg = message.lower().strip()
+    
+    # --- ML Explanation Engine Detection ---
+    import re
+    match_why = re.search(r"why.*match.*(?:id|student)?\s*(\d+)", msg)
+    if not match_why:
+        match_why = re.search(r"why.*(?:id|student)?\s*(\d+)", msg)
+
+    ml_context = ""
+    if match_why:
+        target_id = match_why.group(1)
+        if str(user_id) == str(target_id):
+            ml_context = "[CONTEXT: The user is asking about their own ID. Remind them to ask about match results.]"
+        else:
+            comparison = compare_two_students(user_id, target_id)
+            if comparison:
+                expl_str = ". ".join([e.replace("✔ ", "").replace("⚠ ", "") for e in comparison['explanation']])
+                ml_context = (
+                    f"[ML DATA: Match Score with ID {target_id} is {comparison['score']}%. "
+                    f"Compatibility: {comparison['prediction']}. Factors: {expl_str}.]"
+                )
+            else:
+                ml_context = f"[CONTEXT: Student ID {target_id} was not found in the database.]"
+
+    # --- Gemini API Call ---
+    model = genai.GenerativeModel('gemini-flash-latest')
+    
+    full_prompt = f"{SYSTEM_PROMPT}\n\n"
+    if ml_context:
+        full_prompt += f"System Context: {ml_context}\n"
+    full_prompt += f"User Message: {message}"
+
+    try:
+        response = model.generate_content(full_prompt)
+        return response.text.strip()
+    except Exception as e:
+        # Fallback for API errors (rare)
+        return f"I'm having a little trouble connecting to my neural network (Error: {str(e)}). Please try again in a moment!"

@@ -1,0 +1,15 @@
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
+
+load_dotenv()
+api_key = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=api_key)
+model = genai.GenerativeModel('gemini-pro-latest')
+
+try:
+    print("Testing gemini-pro-latest connection...")
+    response = model.generate_content("Hello, system check. Reply with 'Success' if you can read this.")
+    print(f"Bot Response: {response.text.strip()}")
+except Exception as e:
+    print(f"Error: {e}")
